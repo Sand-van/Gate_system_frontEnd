@@ -56,107 +56,47 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path:'/userManage',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
+    children: [{
+      path: 'index',
+      name: 'UserManage',
+      component: () => import('@/views/userManage/index'),
+      meta: { title: '用户管理', icon: 'user' },
+    }]
   },
 
   {
-    path: '/form',
+    path:'/deviceManage',
     component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
+    children: [{
+      path: 'index',
+      name: 'DeviceManage',
+      component: () => import('@/views/deviceManage/index'),
+      meta: { title: '设备管理', icon: 'door-open' },
+    }]
   },
 
   {
-    path: '/nested',
+    path:'/userPermitManage',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
+    children: [{
+      path: 'index',
+      name: 'UserPermitManage',
+      component: () => import('@/views/userPermitManage/index'),
+      meta: { title: '申请管理', icon: 'apply' },
+    }]
   },
 
   {
-    path: 'external-link',
+    path:'/permissionRecords',
     component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
+    children: [{
+      path: 'index',
+      name: 'PermissionRecords',
+      component: () => import('@/views/permissionRecords/index'),
+      meta: { title: '通行记录', icon: 'records' },
+    }]
   },
 
   // 404 page must be placed at the end !!!
