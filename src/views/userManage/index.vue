@@ -1,37 +1,38 @@
 <template>
   <div>
-    <!-- 上层选择部分 -->
-    <el-row :gutter="20">
-      <el-col :span="3">
-        <!-- 添加按钮 -->
-        <el-button type="primary" icon="el-icon-plus"  @click="showAddDialog">添加用户</el-button>
-        <!-- <div class="grid-content bg-purple"></div> -->
-      </el-col>
-
-      <el-col :span="3">
-        <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="searchUserName" clearable @keyup.enter.native="getPage">
-        </el-input>
-        <!-- <div class="grid-content bg-purple"></div> -->
-      </el-col>
-      
-      <el-col :span="4">
-        <el-input placeholder="要搜索的学工号" prefix-icon="el-icon-edit-outline" v-model="searchUserAccount" clearable @keyup.enter.native="getPage">
-        </el-input>
-        <!-- <div class="grid-content bg-purple"></div> -->
-      </el-col>
-      
-      <el-col :span="2">
-        <el-button type="info" icon="el-icon-search" @click="getPage" round>搜索</el-button>
-        <!-- <div class="grid-content bg-purple"></div> -->
-      </el-col>
-
-      <el-col :span="2" :offset="10">
-        <el-button type="danger" icon="el-icon-delete"  @click="showAddDialog">批量删除</el-button>
-        <!-- <div class="grid-content bg-purple"></div> -->
-      </el-col>
-    </el-row>
-
     <el-card>
+      <!-- 上层选择部分 -->
+      <el-row :gutter="20">
+        <el-col :span="3">
+          <!-- 添加按钮 -->
+          <el-button type="primary" icon="el-icon-plus" @click="showAddDialog">添加用户</el-button>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="3">
+          <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="searchUserName" clearable
+            @keyup.enter.native="getPage">
+          </el-input>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="4">
+          <el-input placeholder="要搜索的学工号" prefix-icon="el-icon-edit-outline" v-model="searchUserAccount" clearable
+            @keyup.enter.native="getPage">
+          </el-input>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="2">
+          <el-button type="info" icon="el-icon-search" @click="getPage" round>搜索</el-button>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="2" :offset="10">
+          <el-button type="danger" icon="el-icon-delete" @click="showAddDialog">批量删除</el-button>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+      </el-row>
       <!-- 表格 -->
       <el-table style="width: 100%;" border stripe :data="dataList">
         <el-table-column prop="prop" label="序号" width="80px" type="index" align="center"></el-table-column>
@@ -51,7 +52,6 @@
           </template>
         </el-table-column>
       </el-table>
-
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="total" :current-page="page"
         :page-size="pageSize" :page-sizes="[5, 10, 20]" layout="prev, pager, next, jumper, ->, sizes, total"
@@ -109,7 +109,7 @@ export default {
       dataList: [],
 
       dialogFormVisible: false,
-      updateDialogFormVisible: false,
+      // updateDialogFormVisible: false,
 
       UserData: {
         id: '',
@@ -145,9 +145,6 @@ export default {
     this.cleanData()
   },
   methods: {
-    getPageByKeyBoardAndMouse() {
-      this.getPage()
-    },
     getPageByPaginationCurrentChange(page) {
       this.page = page
       this.getPage()
@@ -167,7 +164,6 @@ export default {
       }
     },
     cleanData() {
-      // 可以这样吗？
       this.UserData = {}
     },
     showAddDialog() {

@@ -78,12 +78,12 @@ export const constantRoutes = [
   },
 
   {
-    path:'/userPermitManage',
+    path:'/userApplyManage',
     component: Layout,
     children: [{
       path: 'index',
-      name: 'UserPermitManage',
-      component: () => import('@/views/userPermitManage/index'),
+      name: 'UserApplyManage',
+      component: () => import('@/views/userApplyManage/index'),
       meta: { title: '申请管理', icon: 'apply' },
     }]
   },

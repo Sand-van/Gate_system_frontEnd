@@ -47,3 +47,10 @@ export function updateDeviceInfo(deviceInfo) {
         deviceInfo
     })
 }
+
+export function getDeviceSimpleInfo() {
+    return request({
+        url: '/device/simpleInfo',
+        method: 'get',
+    })
+}
