@@ -1,3 +1,4 @@
+import user from '@/store/modules/user'
 import request from '@/utils/request'
 
 export function login(data) {
@@ -27,7 +28,7 @@ export function addUser(userInfo) {
   return request({
     url: '/user/addUser',
     method: 'post',
-    userInfo
+    data: userInfo
   })
 }
 
@@ -43,7 +44,7 @@ export function deleteUserByList(userIdListToDelete) {
   return request({
     url: '/user/deleteByIdList',
     method: 'delete',
-    userIdListToDelete
+    data: userIdListToDelete
   })
 }
 
@@ -59,7 +60,7 @@ export function updateUserInfo(userInfo) {
   return request({
     url: '/user/update',
     method: 'put',
-    userInfo
+    data: userInfo
   })
 }
 
@@ -67,7 +68,14 @@ export function getUserPage(pageInfo) {
   return request({
     url: '/user/page',
     method: 'get',
-    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.queryName, queryNumber: pageInfo.queryNumber}
+    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.searchUserName, queryAccount: pageInfo.searchUserAccount}
   })
 }
 
+export function sendUserInfo(userInfo) {
+  if (userInfo.id) {
+    return updateUserInfo(userInfo)
+  } else {
+    return addUser(userInfo)
+  }
+}
