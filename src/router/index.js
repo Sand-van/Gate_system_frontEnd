@@ -56,18 +56,26 @@ export const constantRoutes = [
   },
 
   {
-    path:'/userManage',
+    path: '/userManage',
     component: Layout,
     children: [{
       path: 'index',
       name: 'UserManage',
       component: () => import('@/views/userManage/index'),
       meta: { title: '用户管理', icon: 'user' },
-    }]
+    },
+    {
+      path: '/userDetail/index/:id',
+      name: 'UserDetail',
+      component: () => import('@/views/userManage/userDetail/index'),
+      meta: { title: '用户详情' },
+      hidden: true
+    }
+    ]
   },
 
   {
-    path:'/deviceManage',
+    path: '/deviceManage',
     component: Layout,
     children: [{
       path: 'index',
@@ -78,7 +86,7 @@ export const constantRoutes = [
   },
 
   {
-    path:'/userApplyManage',
+    path: '/userApplyManage',
     component: Layout,
     children: [{
       path: 'index',
@@ -89,7 +97,7 @@ export const constantRoutes = [
   },
 
   {
-    path:'/permissionRecords',
+    path: '/permissionRecords',
     component: Layout,
     children: [{
       path: 'index',

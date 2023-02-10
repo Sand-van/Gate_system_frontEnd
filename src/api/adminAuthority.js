@@ -20,7 +20,10 @@ export function getAuthorityPageByAdminID(pageInfo) {
     return request({
         url: '/admin/page/adminId',
         method: 'get',
-        params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryID: pageInfo.queryID }
+        params: {
+            page: pageInfo.page, pageSize: pageInfo.pageSize,
+            adminId: pageInfo.adminId, deviceName: pageInfo.searchDeviceName
+        }
     })
 }
 

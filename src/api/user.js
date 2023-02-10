@@ -48,11 +48,11 @@ export function deleteUserByList(userIdListToDelete) {
   })
 }
 
-export function getUserInfo(userId) {
+export function getUserInfo(id) {
   return request({
     url: '/user/getById',
     method: 'get',
-    params: { userId }
+    params: { id }
   })
 }
 

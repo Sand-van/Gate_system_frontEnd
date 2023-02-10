@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function acceptApply(applyID) {
+export function acceptApply(applyId) {
   return request({
     url: '/user/apply/accept',
     method: 'post',
-    params: { applyID }
+    params: { applyId }
   })
 }
 
@@ -36,7 +36,12 @@ export function getApplyPage(pageInfo) {
   return request({
     url: '/user/apply/page',
     method: 'get',
-    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.queryName, queryNumber: pageInfo.queryNumber ,queryDevice: pageInfo.queryDevice}
+    params: {
+      page: pageInfo.page, pageSize: pageInfo.pageSize,
+      queryName: pageInfo.searchUserName,
+      queryAccount: pageInfo.searchUserAccount,
+      queryDevice: pageInfo.SearchDeviceName
+    }
   })
 }
 
@@ -44,6 +49,6 @@ export function getOwnApplyPage(pageInfo) {
   return request({
     url: '/user/apply/pageForMyOwn',
     method: 'get',
-    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryDevice: pageInfo.queryDevice}
+    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryDevice: pageInfo.searchDeviceName }
   })
 }

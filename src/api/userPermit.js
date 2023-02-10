@@ -28,6 +28,12 @@ export function getPermitPage(pageInfo) {
     return request({
         url: '/user/permit/page',
         method: 'get',
-        params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.queryName, queryNumber: pageInfo.queryNumber, queryDevice: pageInfo.queryDevice }
+        params: {
+            page: pageInfo.page, pageSize: pageInfo.pageSize,
+            queryUserId: pageInfo.queryUserId,
+            queryName: pageInfo.queryName,
+            queryAccount: pageInfo.queryNumber,
+            queryDevice: pageInfo.searchDeviceName
+        }
     })
 }

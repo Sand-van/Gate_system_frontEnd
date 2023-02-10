@@ -2,9 +2,12 @@
   <div>
     <!-- 我的申请部分 -->
     <el-card>
+      <div slot="header" class="clearfix">
+        <span>我的申请</span>
+      </div>
       <!-- 上层选择部分 -->
       <el-row :gutter="20">
-        <el-col :span="8">
+        <el-col :span="2">
           <!-- 添加按钮 -->
           <el-button type="primary" icon="el-icon-plus" @click="showApplyAddDialog">添加申请</el-button>
           <!-- <div class="grid-content bg-purple"></div> -->
@@ -32,8 +35,7 @@
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="120px" align="center">
           <template slot-scope="{row, $index}">
-            <el-button type="danger" size="small" icon="el-icon-delete"
-              @click="deleteMyApply(row)">删除</el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteMyApply(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -42,6 +44,61 @@
         :current-page="myApplyData.page" :page-size="myApplyData.pageSize" :page-sizes="[5, 10, 20]"
         layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getMyApplyPageByPaginationCurrentChange"
         @size-change="getMyApplyPageByPaginationSizeChange">
+      </el-pagination>
+    </el-card>
+
+    <!-- 我管理的申请部分 -->
+    <el-card style="margin-top: 30px;">
+      <div slot="header" class="clearfix">
+        <span>我管理的申请</span>
+      </div>
+      <!-- 上层搜索部分 -->
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-input placeholder="要搜索的用户名" prefix-icon="el-icon-user" v-model="myManageData.searchUserName"
+            clearable @keyup.enter.native="getMyManagePage">
+          </el-input>
+        </el-col>
+
+        <el-col :span="4">
+          <el-input placeholder="要搜索的用户账户" prefix-icon="el-icon-edit-outline" v-model="myManageData.searchUserAccount"
+            clearable @keyup.enter.native="getMyManagePage">
+          </el-input>
+        </el-col>
+
+        <el-col :span="4">
+          <el-input placeholder="要搜索的设备名" prefix-icon="el-icon-data-board" v-model="myManageData.searchDeviceName"
+            clearable @keyup.enter.native="getMyManagePage">
+          </el-input>
+        </el-col>
+
+        <el-col :span="2">
+          <el-button type="info" icon="el-icon-search" @click="getMyManagePage" round>搜索</el-button>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+      </el-row>
+
+      <!-- 表格 -->
+      <el-table style="width: 100%; margin-top:20px" border stripe :data="myManageData.dataList">
+        <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
+        <el-table-column prop="userName" label="申请用户名" width="width"></el-table-column>
+        <el-table-column prop="userAccount" label="申请用户账号" width="width"></el-table-column>
+        <el-table-column prop="deviceName" label="申请设备名" width="width"></el-table-column>
+        <el-table-column prop="beginTime" label="开始时间" width="width"></el-table-column>
+        <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
+        <el-table-column prop="prop" label="操作" width="200px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteManageApply(row)">拒绝</el-button>
+            <el-button type="success" size="small" icon="el-icon-delete" @click="acceptManageApply(row)">同意</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页器 -->
+      <el-pagination style="margin-top:20px; text-align: center;" :total="myManageData.total"
+        :current-page="myManageData.page" :page-size="myManageData.pageSize" :page-sizes="[5, 10, 20]"
+        layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getMyManagePageByPaginationCurrentChange"
+        @size-change="getMyManagePageByPaginationSizeChange">
       </el-pagination>
     </el-card>
 
@@ -84,6 +141,16 @@ export default {
         dataList: [],
       },
 
+      myManageData: {
+        page: 1,
+        pageSize: 10,
+        searchUserName: '',
+        searchUserAccount: '',
+        searchDeviceName: '',
+        total: 0,
+        dataList: [],
+      },
+
       allDeviceInfo: [],
 
       dialogFormVisible: false,
@@ -113,6 +180,7 @@ export default {
   },
   mounted() {
     this.getMyApplyPage();
+    this.getMyManagePage();
     this.getAllDevice();
     this.cleanApplyData()
   },
@@ -180,6 +248,38 @@ export default {
         });
         this.getMyApplyPage()
       }
+    },
+
+    getMyManagePageByPaginationCurrentChange(page) {
+      this.myManageData.page = page
+      this.getMyManagePage()
+    },
+    getMyManagePageByPaginationSizeChange(pagerSize) {
+      this.myManageData.page = 1
+      this.myManageData.pageSize = pagerSize
+      this.getMyManagePage()
+    },
+    async getMyManagePage() {
+      const { page, pageSize, searchUserName, searchUserAccount,searchDeviceName } = this.myManageData;
+      let result = await this.$API.userApply.getApplyPage({ page, pageSize, searchUserName, searchUserAccount, searchDeviceName })
+      if (result.code == 200) {
+        this.myManageData.total = result.data.total
+        this.myManageData.dataList = result.data.records
+      }
+    },
+    async acceptManageApply(row) {
+      let result = await this.$API.userApply.acceptApply(row.id)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '同意成功!'
+        });
+        this.getMyManagePage()
+      }
+    },
+    deleteManageApply(row) {
+      this.deleteMyApply(row)
+      this.getMyManagePage()
     }
   },
 }
@@ -187,5 +287,13 @@ export default {
 
 
 <style>
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
+.clearfix:after {
+  clear: both
+}
 </style>

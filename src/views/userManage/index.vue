@@ -40,12 +40,18 @@
         <el-table-column prop="account" label="学工号" width="width"></el-table-column>
         <el-table-column prop="phoneNumber" label="手机号" width="width"></el-table-column>
         <el-table-column prop="cardId" label="校园卡id" width="width"></el-table-column>
-        <el-table-column prop="type" label="用户类型" width="80px" align="center"></el-table-column>
+        <el-table-column prop="prop" label="用户类型" width="110px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.type === '1'" type="success">普通用户</el-tag>
+            <el-tag v-else-if="row.type === '2'" type="warning">管理员</el-tag>
+            <el-tag v-else-if="row.type === '3'" type="danger">超级管理员</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="prop" label="操作" width="250px" align="center">
           <template slot-scope="{row, $index}">
             <!-- <el-button-group> -->
-            <el-button type="primary" size="small" icon="el-icon-edit" @click="showUpdateDialog(row)">编辑</el-button>
-            <el-button type="info" size="small">详情</el-button>
+            <el-button type="warning" size="small" icon="el-icon-edit" @click="showUpdateDialog(row)">编辑</el-button>
+            <el-button type="primary" size="small" @click="jumpToUserInfoPage(row)">详情</el-button>
             <el-button type="danger" size="small" icon="el-icon-delete"
               @click="openConfirmMessageBox(row)">删除</el-button>
             <!-- </el-button-group> -->
@@ -157,7 +163,6 @@ export default {
     async getPage() {
       const { page, pageSize, searchUserName, searchUserAccount } = this;
       let result = await this.$API.user.getUserPage({ page, pageSize, searchUserName, searchUserAccount })
-      // console.log(result)
       if (result.code == 200) {
         this.total = result.data.total
         this.dataList = result.data.records
@@ -174,7 +179,7 @@ export default {
       this.$set(this.UserData, "account", row.account)
       this.$set(this.UserData, "name", row.name)
       this.$set(this.UserData, "phoneNumber", row.phoneNumber)
-      this.$set(this.UserData, "type", row.type.toString())
+      this.$set(this.UserData, "type", row.type)
       this.$set(this.UserData, "cardId", row.cardId)
 
       this.dialogFormVisible = true
@@ -187,7 +192,7 @@ export default {
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
           this.dialogFormVisible = false
-          this.UserData.type = this.UserData.type - 0
+          this.UserData.type = this.UserData.type
           let result = await this.$API.user.sendUserInfo(this.UserData)
           if (result.code == 200) {
             this.$message({ message: this.UserData.id ? '修改用户成功' : "添加用户成功", type: 'success' })
@@ -219,6 +224,10 @@ export default {
         // message: '已取消删除'
         // });
       });
+    },
+    jumpToUserInfoPage(row) {
+      // this.$router.push({ path:"/userManage/userDetail/index/"+row.id})
+      this.$router.push({name:"UserDetail", params:{id: row.id}})
     }
   }
 }

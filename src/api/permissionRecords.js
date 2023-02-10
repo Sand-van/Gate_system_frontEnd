@@ -7,9 +7,11 @@ export function getRecordsPage(pageInfo) {
         params: {
             page: pageInfo.page,
             pageSize: pageInfo.pageSize,
+            queryUserId: pageInfo.queryUserId,
+            queryDeviceId: pageInfo.queryDeviceId,
             queryName: pageInfo.searchUserName,
-            queryNumber: pageInfo.searchUserAccount,
-            queryDevice: pageInfo.searchDeviceName,
+            queryAccount: pageInfo.searchUserAccount,
+            queryDeviceName: pageInfo.searchDeviceName,
             beginTime: pageInfo.searchBeingTime,
             endTime: pageInfo.searchEndTime
         }
