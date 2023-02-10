@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-card>
+      <div slot="header" class="clearfix">
+        <span>用户管理</span>
+        <el-button type="primary" icon="el-icon-plus" size="medium" @click="showAddDialog" style="margin-left: 20px;">添加用户</el-button>
+        <el-button type="danger" icon="el-icon-delete" @click="openConfirmDeleteListMessageBox" style="float: right">批量删除</el-button>
+      </div>
       <!-- 上层选择部分 -->
       <el-row :gutter="20">
-        <el-col :span="3">
-          <!-- 添加按钮 -->
-          <el-button type="primary" icon="el-icon-plus" @click="showAddDialog">添加用户</el-button>
-          <!-- <div class="grid-content bg-purple"></div> -->
-        </el-col>
 
         <el-col :span="3">
           <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="searchUserName" clearable
@@ -27,15 +27,12 @@
           <el-button type="info" icon="el-icon-search" @click="getPage" round>搜索</el-button>
           <!-- <div class="grid-content bg-purple"></div> -->
         </el-col>
-
-        <el-col :span="2" :offset="10">
-          <el-button type="danger" icon="el-icon-delete" @click="showAddDialog">批量删除</el-button>
-          <!-- <div class="grid-content bg-purple"></div> -->
-        </el-col>
       </el-row>
       <!-- 表格 -->
-      <el-table style="width: 100%;" border stripe :data="dataList">
-        <el-table-column prop="prop" label="序号" width="80px" type="index" align="center"></el-table-column>
+      <el-table style="width: 100%;" border stripe :data="dataList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center">
+        </el-table-column>
+        <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" width="240px"></el-table-column>
         <el-table-column prop="account" label="学工号" width="width"></el-table-column>
         <el-table-column prop="phoneNumber" label="手机号" width="width"></el-table-column>
@@ -127,6 +124,8 @@ export default {
         type: ''
       },
 
+      multipleSelection:[],
+
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' }
@@ -151,6 +150,9 @@ export default {
     this.cleanData()
   },
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     getPageByPaginationCurrentChange(page) {
       this.page = page
       this.getPage()
@@ -191,7 +193,7 @@ export default {
     sendUserInfo() {
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
-          this.dialogFormVisible = false
+          // this.dialogFormVisible = false
           this.UserData.type = this.UserData.type
           let result = await this.$API.user.sendUserInfo(this.UserData)
           if (result.code == 200) {
@@ -225,9 +227,34 @@ export default {
         // });
       });
     },
+    openConfirmDeleteListMessageBox() {
+      this.$confirm('将永久删除' + this.multipleSelection.length + '个用户, 此操作不可逆！,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const userToDelete = []
+        this.multipleSelection.forEach(element => {
+          userToDelete.push(element.id)
+        });
+        let result = await this.$API.user.deleteUserByList(userToDelete)
+        if (result.code == 200) {
+          this.$message({
+            type: 'success',
+            message: result.data
+          });
+          this.getPage()
+        }
+      }).catch(() => {
+        // this.$message({
+        // type: 'info',
+        // message: '已取消删除'
+        // });
+      });
+    },
     jumpToUserInfoPage(row) {
       // this.$router.push({ path:"/userManage/userDetail/index/"+row.id})
-      this.$router.push({name:"UserDetail", params:{id: row.id}})
+      this.$router.push({ name: "UserDetail", params: { id: row.id } })
     }
   }
 }
