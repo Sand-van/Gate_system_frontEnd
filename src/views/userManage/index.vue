@@ -7,8 +7,7 @@
         <el-button type="danger" icon="el-icon-delete" @click="openConfirmDeleteListMessageBox" style="float: right">批量删除</el-button>
       </div>
       <!-- 上层选择部分 -->
-      <el-row :gutter="20">
-
+      <el-row :gutter="8">
         <el-col :span="3">
           <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="searchUserName" clearable
             @keyup.enter.native="getPage">

@@ -8,27 +8,27 @@ export function addDevice(deviceInfo) {
     })
 }
 
-export function deleteDevice(deviceID) {
+export function deleteDevice(deviceIdToDelete) {
     return request({
         url: '/device/delete',
         method: 'delete',
-        params: {deviceID}
+        params: { deviceIdToDelete }
     })
 }
 
-export function getDeviceInfo(deviceID) {
+export function getDeviceInfo(deviceId) {
     return request({
         url: '/device/getById',
         method: 'get',
-        params: { deviceID }
+        params: { deviceId }
     })
 }
 
-export function openDevice(deviceID) {
+export function openDevice(deviceId) {
     return request({
         url: '/device/openDevice',
         method: 'post',
-        params: {deviceID}
+        params: { deviceId }
     })
 }
 
@@ -36,7 +36,7 @@ export function getDevicePage(pageInfo) {
     return request({
         url: '/device/page',
         method: 'get',
-        params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.queryName }
+        params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.searchDeviceName }
     })
 }
 

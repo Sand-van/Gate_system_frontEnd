@@ -63,7 +63,6 @@
           <!-- <div class="grid-content bg-purple"></div> -->
         </el-col>
       </el-row>
-
       <!-- 表格 -->
       <el-table style="width: 100%; margin-top:20px" border stripe :data="myManageDeviceData.dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
@@ -72,7 +71,7 @@
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="120px" align="center">
           <template slot-scope="{row, $index}">
-            <el-button type="primary" size="small" icon="el-icon-info">查看详情</el-button>
+            <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToDeviceInfoPage(row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -159,7 +158,7 @@
       </el-pagination>
     </el-card>
 
-    <!-- 添加用户表单 -->
+    <!-- 修改用户表单 -->
     <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible">
       <el-form :model="updateUserData" label-width="80px" :rules="rules" ref="ruleForm">
         <el-form-item label="用户账户" prop="account">
@@ -221,7 +220,7 @@ export default {
         total: 0,
         dataList: [],
       },
-      // 用户的通信权限查询数据
+      // 用户的通行记录
       myRecordsData: {
         page: 1,
         pageSize: 10,
@@ -364,6 +363,9 @@ export default {
         }
       })
     },
+    jumpToDeviceInfoPage(row) {
+      this.$router.push({ name: "DeviceDetail", params: { id: row.deviceId } })
+    }
   },
 }
 </script>

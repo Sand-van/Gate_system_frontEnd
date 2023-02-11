@@ -82,7 +82,14 @@ export const constantRoutes = [
       name: 'DeviceManage',
       component: () => import('@/views/deviceManage/index'),
       meta: { title: '设备管理', icon: 'door-open' },
-    }]
+    },
+    {
+      path: '/deviceDetail/index/:id',
+      name: 'DeviceDetail',
+      component: () => import('@/views/deviceManage/deviceDetail/index'),
+      hidden: true
+    }
+    ]
   },
 
   {
