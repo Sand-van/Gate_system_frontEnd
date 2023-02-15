@@ -4,23 +4,31 @@ export function addPermit(userPermitToAdd) {
   return request({
     url: '/user/permit/add',
     method: 'post',
-    userPermitToAdd
+    data: userPermitToAdd
   })
 }
 
-export function deletePermit(userPermitID) {
+export function addPermitByList(userPermitListToAdd) {
+  return request({
+    url: '/user/permit/addByList',
+    method: 'post',
+    data: userPermitListToAdd
+  })
+}
+
+export function deletePermit(userPermitId) {
   return request({
     url: '/user/permit/deleteById',
-    method: 'post',
-    params: { userPermitID }
+    method: 'delete',
+    params: { userPermitId }
   })
 }
 
-export function deletePermitByList(userPermitIDList) {
+export function deletePermitByList(userPermitIdList) {
   return request({
     url: '/user/permit/deleteByIdList',
     method: 'post',
-    userPermitIDList
+    userPermitIdList
   })
 }
 

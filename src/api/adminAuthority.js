@@ -4,15 +4,23 @@ export function addAuthority(adminAuthorityToAdd) {
   return request({
     url: '/admin/add',
     method: 'post',
-    adminAuthorityToAdd
+    data: adminAuthorityToAdd
   })
 }
 
-export function deleteAuthority(adminAuthorityID) {
+export function addAuthorityList(adminAuthorityListToAdd) {
+  return request({
+    url: '/admin/addByList',
+    method: 'post',
+    data: adminAuthorityListToAdd
+  })
+}
+
+export function deleteAuthority(adminAuthorityId) {
   return request({
     url: '/admin/deleteById',
-    method: 'post',
-    params: { adminAuthorityID }
+    method: 'delete',
+    params: { adminAuthorityId }
   })
 }
 

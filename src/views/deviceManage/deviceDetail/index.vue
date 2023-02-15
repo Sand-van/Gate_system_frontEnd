@@ -34,6 +34,8 @@
     <el-card style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>管理该设备的管理员</span>
+        <el-button type="primary" icon="el-icon-plus" size="medium" @click="showAddAdminDialog"
+          style=" float: right">添加管理员</el-button>
       </div>
       <!-- 上层搜索部分 -->
       <el-row :gutter="20">
@@ -59,16 +61,18 @@
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="adminName" label="用户名" width="width"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
-        <el-table-column prop="prop" label="操作" width="120px" align="center">
+        <el-table-column prop="prop" label="操作" width="240px" align="center">
           <template slot-scope="{row, $index}">
             <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToUserInfoPage(row)">查看用户</el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteAuthority(row)">删除权限</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="deviceManageData.total"
         :current-page="deviceManageData.page" :page-size="deviceManageData.pageSize" :page-sizes="[5, 10, 20]"
-        layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getDeviceManagePageByPaginationCurrentChange"
+        layout="prev, pager, next, jumper, ->, sizes, total"
+        @current-change="getDeviceManagePageByPaginationCurrentChange"
         @size-change="getDeviceManagePageByPaginationSizeChange">
       </el-pagination>
     </el-card>
@@ -77,6 +81,8 @@
     <el-card style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>拥有通行权限的用户</span>
+        <el-button type="primary" icon="el-icon-plus" size="medium" @click="showAddPermitDialog"
+          style=" float: right">添加用户权限</el-button>
       </div>
       <!-- 上层搜索部分 -->
       <el-row :gutter="20">
@@ -96,19 +102,24 @@
           <!-- <div class="grid-content bg-purple"></div> -->
         </el-col>
       </el-row>
-
       <!-- 表格 -->
       <el-table style="width: 100%; margin-top:20px" border stripe :data="devicePermitData.dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="userName" label="用户名" width="width"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
         <el-table-column prop="beginTime" label="开始时间" width="width"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
+        <el-table-column prop="prop" label="操作" width="240px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToUserInfoPage(row)">查看用户</el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="deletePermit(row)">删除权限</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="devicePermitData.total"
         :current-page="devicePermitData.page" :page-size="devicePermitData.pageSize" :page-sizes="[5, 10, 20]"
-        layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getDevicePermitPageByPaginationCurrentChange"
+        layout="prev, pager, next, jumper, ->, sizes, total"
+        @current-change="getDevicePermitPageByPaginationCurrentChange"
         @size-change="getDevicePermitPageByPaginationSizeChange">
       </el-pagination>
     </el-card>
@@ -126,8 +137,8 @@
           </el-input>
         </el-col>
         <el-col :span="3">
-          <el-input placeholder="要搜索的用户账号" prefix-icon="el-icon-data-board" v-model="deviceRecordsData.searchUserAccount"
-            clearable @keyup.enter.native="getDeviceRecordsPage">
+          <el-input placeholder="要搜索的用户账号" prefix-icon="el-icon-data-board"
+            v-model="deviceRecordsData.searchUserAccount" clearable @keyup.enter.native="getDeviceRecordsPage">
           </el-input>
         </el-col>
         <el-col :span="7">
@@ -152,14 +163,129 @@
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="deviceRecordsData.total"
         :current-page="deviceRecordsData.page" :page-size="deviceRecordsData.pageSize" :page-sizes="[5, 10, 20]"
-        layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getDeviceRecordsPageByPaginationCurrentChange"
+        layout="prev, pager, next, jumper, ->, sizes, total"
+        @current-change="getDeviceRecordsPageByPaginationCurrentChange"
         @size-change="getDeviceRecordsPageByPaginationSizeChange">
       </el-pagination>
     </el-card>
+
+
+    <!-- 添加管理员权限表单 -->
+    <el-dialog title='添加管理员' :visible.sync="addAdminDialogFormVisible">
+
+      <el-row :gutter="8">
+        <el-col :span="6">
+          <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="userSelect.searchUserName" clearable
+            @keyup.enter.native="getUserPage">
+          </el-input>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="6">
+          <el-input placeholder="要搜索的学工号" prefix-icon="el-icon-edit-outline" v-model="userSelect.searchUserAccount"
+            clearable @keyup.enter.native="getUserPage">
+          </el-input>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+
+        <el-col :span="2">
+          <el-button type="primary" icon="el-icon-search" @click="getUserPage" round>搜索</el-button>
+          <!-- <div class="grid-content bg-purple"></div> -->
+        </el-col>
+      </el-row>
+      <!-- 表格 -->
+      <el-table style="width: 100%; margin-top: 20px;" border stripe :data="userSelect.dataList"
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center">
+        </el-table-column>
+        <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="240px"></el-table-column>
+        <el-table-column prop="account" label="学工号" width="width"></el-table-column>
+        <el-table-column prop="prop" label="用户类型" width="110px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.type === '1'" type="success">普通用户</el-tag>
+            <el-tag v-else-if="row.type === '2'" type="warning">管理员</el-tag>
+            <el-tag v-else-if="row.type === '3'" type="danger">超级管理员</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页器 -->
+      <el-pagination style="margin-top:20px; text-align: center;" :total="userSelect.total"
+        :current-page="userSelect.page" :page-size="userSelect.pageSize" :page-sizes="[5, 10, 20]"
+        layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getUserPageByPaginationCurrentChange"
+        @size-change="getUserPageByPaginationSizeChange">
+      </el-pagination>
+
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="disShowAddAdminDialog">完 成</el-button>
+        <el-button type="primary" @click="sendAddAdminInfo">添 加</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 添加用户权限表单 -->
+    <el-dialog title='添加用户通行权限' :visible.sync="addPermitDialogFormVisible">
+      <el-date-picker v-model="selectBeginAndEndTime" type="datetimerange" range-separator="-" start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+      </el-date-picker>
+
+      <el-card style="margin-top: 20px;">
+        <!-- 搜索框 -->
+        <el-row :gutter="8" >
+          <el-col :span="6">
+            <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="userSelect.searchUserName" clearable
+              @keyup.enter.native="getUserPage">
+            </el-input>
+            <!-- <div class="grid-content bg-purple"></div> -->
+          </el-col>
+  
+          <el-col :span="6">
+            <el-input placeholder="要搜索的学工号" prefix-icon="el-icon-edit-outline" v-model="userSelect.searchUserAccount"
+              clearable @keyup.enter.native="getUserPage">
+            </el-input>
+            <!-- <div class="grid-content bg-purple"></div> -->
+          </el-col>
+  
+          <el-col :span="2">
+            <el-button type="primary" icon="el-icon-search" @click="getUserPage" round>搜索</el-button>
+            <!-- <div class="grid-content bg-purple"></div> -->
+          </el-col>
+        </el-row>
+        <!-- 表格 -->
+        <el-table style="width: 100%; margin-top: 20px;" border stripe :data="userSelect.dataList"
+          @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center">
+          </el-table-column>
+          <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
+          <el-table-column prop="name" label="姓名" width="240px"></el-table-column>
+          <el-table-column prop="account" label="学工号" width="width"></el-table-column>
+          <el-table-column prop="prop" label="用户类型" width="110px" align="center">
+            <template slot-scope="{row, $index}">
+              <el-tag v-if="row.type === '1'" type="success">普通用户</el-tag>
+              <el-tag v-else-if="row.type === '2'" type="warning">管理员</el-tag>
+              <el-tag v-else-if="row.type === '3'" type="danger">超级管理员</el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页器 -->
+        <el-pagination style="margin-top:20px; text-align: center;" :total="userSelect.total"
+          :current-page="userSelect.page" :page-size="userSelect.pageSize" :page-sizes="[5, 10, 20]"
+          layout="prev, pager, next, jumper, ->, sizes, total" @current-change="getUserPageByPaginationCurrentChange"
+          @size-change="getUserPageByPaginationSizeChange">
+        </el-pagination>
+      </el-card>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="disShowAddPermitDialog">完 成</el-button>
+        <el-button type="primary" @click="sendAddPermitInfo">添 加</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { deletePermit } from '@/api/userPermit'
+
 
 export default {
   name: 'deviceDetail',
@@ -200,6 +326,23 @@ export default {
         total: 0,
         dataList: [],
       },
+
+      // 选择用户特定相关
+      userSelect: {
+        page: 1,
+        pageSize: 10,
+        searchUserName: '',
+        searchUserAccount: '',
+        searchUserType: '',
+        total: 0,
+        dataList: [],
+        multipleSelection: [],
+      },
+
+      // 添加管理员相关
+      addAdminDialogFormVisible: false,
+      addPermitDialogFormVisible: false,
+      selectBeginAndEndTime: []
     }
   },
   mounted() {
@@ -271,8 +414,110 @@ export default {
         this.deviceRecordsData.dataList = result.data.records
       }
     },
+    // 一些按钮操作
     jumpToUserInfoPage(row) {
       this.$router.push({ name: "UserDetail", params: { id: row.userId } })
+    },
+    async deleteAuthority(row) {
+      let result = await this.$API.adminAuthority.deleteAuthority(row.id)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        });
+      }
+      this.getDeviceManagePage()
+    },
+    async deletePermit(row) {
+      let result = await this.$API.userPermit.deletePermit(row.id)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        });
+      }
+      this.getDevicePermitPage()
+    },
+
+    // 获取用户列表信息
+    getUserPageByPaginationCurrentChange(page) {
+      this.userSelect.page = page
+      this.getUserPage()
+    },
+    getUserPageByPaginationSizeChange(pagerSize) {
+      this.userSelect.page = 1
+      this.userSelect.pageSize = pagerSize
+      this.getUserPage()
+    },
+    async getUserPage() {
+      const { page, pageSize, searchUserName, searchUserAccount } = this.userSelect;
+      const searchUserType = this.userSelect.searchUserType
+      let result = await this.$API.user.getUserPage({ page, pageSize, searchUserName, searchUserAccount, searchUserType })
+      if (result.code == 200) {
+        this.userSelect.total = result.data.total
+        this.userSelect.dataList = result.data.records
+      }
+    },
+    handleSelectionChange(val) {
+      this.userSelect.multipleSelection = val
+    },
+    // 添加管理员
+    showAddAdminDialog() {
+      this.userSelect.searchUserType = 2
+      this.getUserPage()
+      this.addAdminDialogFormVisible = true
+    },
+    disShowAddAdminDialog() {
+      this.addAdminDialogFormVisible = false
+      this.userSelect.searchUserName = ''
+      this.userSelect.searchUserAccount = ''
+    },
+    async sendAddAdminInfo() {
+      const newAdminList = []
+      this.userSelect.multipleSelection.forEach(element => {
+        const adminAuthority = { userId: '', deviceId: '' }
+        adminAuthority.deviceId = this.queryDeviceId
+        adminAuthority.userId = element.id
+        newAdminList.push(adminAuthority)
+      });
+      let result = await this.$API.adminAuthority.addAuthorityList(newAdminList)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: result.data
+        });
+      }
+      this.getDeviceManagePage()
+    },
+    // 添加权限
+    showAddPermitDialog() {
+      this.userSelect.searchUserType = ''
+      this.getUserPage()
+      this.addPermitDialogFormVisible = true
+    },
+    disShowAddPermitDialog() {
+      this.addPermitDialogFormVisible = false
+      this.userSelect.searchUserName = ''
+      this.userSelect.searchUserAccount = ''
+    },
+    async sendAddPermitInfo() {
+      const newPermitList = []
+      this.userSelect.multipleSelection.forEach(element => {
+        const userPermit = { userId: '', deviceId: '', beginTime: '', endTime: '' }
+        userPermit.deviceId = this.queryDeviceId
+        userPermit.userId = element.id
+        userPermit.beginTime = this.selectBeginAndEndTime[0]
+        userPermit.endTime = this.selectBeginAndEndTime[1]
+        newPermitList.push(userPermit)
+      });
+      let result = await this.$API.userPermit.addPermitByList(newPermitList)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: result.data
+        });
+      }
+      this.getDevicePermitPage()
     }
   }
 }

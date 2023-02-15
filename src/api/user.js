@@ -68,7 +68,11 @@ export function getUserPage(pageInfo) {
   return request({
     url: '/user/page',
     method: 'get',
-    params: { page: pageInfo.page, pageSize: pageInfo.pageSize, queryName: pageInfo.searchUserName, queryAccount: pageInfo.searchUserAccount}
+    params: {
+      page: pageInfo.page, pageSize: pageInfo.pageSize,
+      queryName: pageInfo.searchUserName, queryAccount: pageInfo.searchUserAccount,
+      queryType: pageInfo.searchUserType
+    }
   })
 }
 
