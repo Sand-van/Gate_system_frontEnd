@@ -163,14 +163,14 @@
     <!-- 修改用户表单 -->
     <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible">
       <el-form :model="updateUserData" label-width="80px" :rules="rules" ref="ruleForm">
+        <el-form-item label="用户名称" prop="name">
+          <el-input v-model="updateUserData.name"></el-input>
+        </el-form-item>
         <el-form-item label="用户账户" prop="account">
           <el-input v-model="updateUserData.account"></el-input>
         </el-form-item>
         <el-form-item label="用户密码" v-if="!updateUserData.id" prop="password">
           <el-input v-model="updateUserData.password"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名称" prop="name">
-          <el-input v-model="updateUserData.name"></el-input>
         </el-form-item>
         <el-form-item label="电话号码">
           <el-input v-model="updateUserData.phoneNumber"></el-input>

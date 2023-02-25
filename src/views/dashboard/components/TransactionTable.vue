@@ -48,9 +48,8 @@ export default {
     async fetchData() {
       const page = this.page
       const pageSize = this.pageSize
-      const searchUserAccount = this.USER_ACCOUNT
-      // let result = await this.$API.permissionRecords.getRecordsPage({ page, pageSize, searchUserName, searchUserAccount, searchDeviceName, searchBeingTime, searchEndTime })
-      let result = await this.$API.permissionRecords.getRecordsPage({ page, pageSize, searchUserAccount })
+      const queryUserId = this.USER_ID
+      let result = await this.$API.permissionRecords.getRecordsPage({ page, pageSize, queryUserId })
       if (result.code == 200) {
         this.dataList = result.data.records
       }

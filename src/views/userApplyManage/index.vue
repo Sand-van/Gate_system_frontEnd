@@ -48,7 +48,7 @@
     </el-card>
 
     <!-- 我管理的申请部分 -->
-    <el-card style="margin-top: 30px;">
+    <el-card v-if="this.USER_TYPE != 1" style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>我管理的申请</span>
       </div>
@@ -175,12 +175,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'USER_ID'
+      'USER_ID',
+      'USER_TYPE'
     ])
   },
   mounted() {
     this.getMyApplyPage();
-    this.getMyManagePage();
+    if (this.USER_TYPE != 1) {
+      this.getMyManagePage();
+    }
     this.getAllDevice();
     this.cleanApplyData()
   },

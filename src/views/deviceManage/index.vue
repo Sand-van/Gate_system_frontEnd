@@ -46,11 +46,18 @@
       <el-table style="width: 100%; margin-top:20px" border stripe :data="myManageDeviceData.dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="deviceName" label="设备名" width="width"></el-table-column>
-        <el-table-column prop="prop" label="状态" width="width"></el-table-column>
+        <!-- <el-table-column prop="prop" label="状态" width="80px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.status === '1'" type="success">在线</el-tag>
+            <el-tag v-else-if="row.status === '2'" type="danger">离线</el-tag>
+            <el-tag v-else-if="row.status === '3'" type="info">禁用</el-tag>
+          </template>
+        </el-table-column> -->
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="120px" align="center">
           <template slot-scope="{row, $index}">
-            <el-button type="primary" size="small" icon="el-icon-info">查看详情</el-button>
+            <el-button type="primary" size="small" icon="el-icon-info"
+              @click="jumpToDeviceInfoPage(row.deviceId)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -100,9 +107,8 @@
         <el-table-column prop="prop" label="操作" width="200px" align="center">
           <template slot-scope="{row, $index}">
             <el-button type="primary" size="small" icon="el-icon-info"
-              @click="jumpToDeviceInfoPage(row)">详情</el-button>
-            <el-button type="danger" size="small" icon="el-icon-delete"
-              @click="openConfirmMessageBox(row)">删除</el-button>
+              @click="jumpToDeviceInfoPage(row.id)">详情</el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="openConfirmMessageBox(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -140,6 +146,11 @@
         <el-table-column prop="deviceName" label="设备名" width="width"></el-table-column>
         <el-table-column prop="beginTime" label="开始时间" width="width"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
+        <el-table-column prop="prop" label="操作" width="120" align="center">
+          <template slot-scope="{row, $index}">
+            <el-button type="primary" size="small" icon="el-icon-info" @click="runDevice(row.deviceId)">开启</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="myPermitDeviceData.total"
@@ -202,9 +213,12 @@ export default {
     if (this.USER_TYPE == '3') {
       this.$set(this.queryUserData, 'type', this.USER_TYPE)
       this.getSuperAdminManagePage()
-    } else {
+    } else if (this.USER_TYPE == '2') {
       this.getUserInfo()
       this.getMyManagePage()
+      this.getMyPermitPage()
+    } else {
+      this.getUserInfo()
       this.getMyPermitPage()
     }
   },
@@ -281,8 +295,7 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
-          if (this.queryUserData.type == 3)
-          {
+          if (this.queryUserData.type == 3) {
             this.getSuperAdminManagePage()
           }
         }
@@ -310,8 +323,11 @@ export default {
       }).catch(() => {
       });
     },
-    jumpToDeviceInfoPage(row) {
-      this.$router.push({ name: "DeviceDetail", params: { id: row.id } })
+    jumpToDeviceInfoPage(id) {
+      this.$router.push({ name: "DeviceDetail", params: { id: id } })
+    },
+    runDevice(deviceId) {
+      console.log(deviceId)
     }
   },
 

@@ -54,10 +54,13 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+]
 
+export const asyncRoutes = [
   {
     path: '/userManage',
     component: Layout,
+    name: 'UserManageMain',
     children: [{
       path: 'index',
       name: 'UserManage',
@@ -77,6 +80,7 @@ export const constantRoutes = [
   {
     path: '/deviceManage',
     component: Layout,
+    name: 'DeviceManageMain',
     children: [{
       path: 'index',
       name: 'DeviceManage',
@@ -95,6 +99,7 @@ export const constantRoutes = [
   {
     path: '/userApplyManage',
     component: Layout,
+    name: 'UserApplyManageMain',
     children: [{
       path: 'index',
       name: 'UserApplyManage',
@@ -106,6 +111,7 @@ export const constantRoutes = [
   {
     path: '/permissionRecords',
     component: Layout,
+    name:'PermissionRecordsMain',
     children: [{
       path: 'index',
       name: 'PermissionRecords',
@@ -113,22 +119,22 @@ export const constantRoutes = [
       meta: { title: '通行记录', icon: 'records' },
     }]
   },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
+// 404 page must be placed at the end !!!
+export const anyRoutes = { path: '*', redirect: '/404', hidden: true }
+
+const createRouter = (routers) => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: routers
 })
 
-const router = createRouter()
+const router = createRouter(constantRoutes)
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
+export function resetRouter(routers) {
+  const newRouter = createRouter(routers)
   router.matcher = newRouter.matcher // reset router
 }
 

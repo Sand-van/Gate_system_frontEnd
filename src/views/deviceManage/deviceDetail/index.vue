@@ -41,7 +41,7 @@
     <el-card style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>管理该设备的管理员</span>
-        <el-button type="primary" icon="el-icon-plus" size="medium" @click="showAddAdminDialog"
+        <el-button v-if="this.USER_TYPE == 3" type="primary" icon="el-icon-plus" size="medium" @click="showAddAdminDialog"
           style=" float: right">添加管理员</el-button>
       </div>
       <!-- 上层搜索部分 -->
@@ -68,9 +68,10 @@
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="adminName" label="用户名" width="width"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
-        <el-table-column prop="prop" label="操作" width="240px" align="center">
+        <el-table-column v-if="this.USER_TYPE == 3" prop="prop" label="操作" width="240px" align="center" >
           <template slot-scope="{row, $index}">
-            <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToUserInfoPage(row)">查看用户</el-button>
+            <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToUserInfoPage(row)"
+              >查看用户</el-button>
             <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteAuthority(row)">删除权限</el-button>
           </template>
         </el-table-column>
@@ -115,9 +116,14 @@
         <el-table-column prop="userName" label="用户名" width="width"></el-table-column>
         <el-table-column prop="beginTime" label="开始时间" width="width"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
-        <el-table-column prop="prop" label="操作" width="240px" align="center">
+        <el-table-column v-if="this.USER_TYPE == 3" prop="prop" label="操作" width="240px" align="center">
           <template slot-scope="{row, $index}">
             <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToUserInfoPage(row)">查看用户</el-button>
+            <el-button type="danger" size="small" icon="el-icon-delete" @click="deletePermit(row)">删除权限</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="this.USER_TYPE == 2" prop="prop" label="操作" width="120px" align="center">
+          <template slot-scope="{row, $index}">
             <el-button type="danger" size="small" icon="el-icon-delete" @click="deletePermit(row)">删除权限</el-button>
           </template>
         </el-table-column>
@@ -314,10 +320,17 @@
 
 <script>
 import { deletePermit } from '@/api/userPermit'
+import { mapGetters } from 'vuex'
 
 
 export default {
   name: 'deviceDetail',
+  computed: {
+    ...mapGetters([
+      'USER_ID',
+      'USER_TYPE'
+    ])
+  },
   data() {
     return {
       queryDeviceId: '',

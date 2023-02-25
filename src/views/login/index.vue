@@ -113,7 +113,7 @@ export default {
           //派发一个action，带着用户名和密码的载荷去user/login
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             //登录成功后的路由的跳转
-            this.$router.push({ path: this.redirect || '/' })
+            this.$router.push({ name: "Dashboard"})
             this.loading = false
           }).catch(() => {
             this.loading = false
