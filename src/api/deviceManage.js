@@ -4,7 +4,7 @@ export function addDevice(deviceInfo) {
     return request({
         url: '/device/add',
         method: 'post',
-        deviceInfo
+        data: deviceInfo
     })
 }
 
@@ -44,7 +44,7 @@ export function updateDeviceInfo(deviceInfo) {
     return request({
         url: '/device/update',
         method: 'post',
-        deviceInfo
+        data: deviceInfo
     })
 }
 

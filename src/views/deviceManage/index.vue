@@ -66,8 +66,8 @@
     <el-card v-if="this.queryUserData.type == '3'" style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>我管理的设备</span>
-        <el-button type="danger" icon="el-icon-delete" @click="openConfirmDeleteListMessageBox"
-          style="float: right">批量删除</el-button>
+        <!-- <el-button type="danger" icon="el-icon-delete" @click="openConfirmDeleteListMessageBox"
+          style="float: right">批量删除</el-button> -->
       </div>
       <!-- 上层搜索部分 -->
       <el-row :gutter="20">
@@ -148,7 +148,6 @@
         @size-change="getMyPermitPageByPaginationSizeChange">
       </el-pagination>
     </el-card>
-
 
   </div>
 </template>

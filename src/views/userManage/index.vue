@@ -23,7 +23,7 @@
         </el-col>
 
         <el-col :span="2">
-          <el-button type="info" icon="el-icon-search" @click="getPage" round>搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="getPage" round>搜索</el-button>
           <!-- <div class="grid-content bg-purple"></div> -->
         </el-col>
       </el-row>
@@ -192,12 +192,14 @@ export default {
     sendUserInfo() {
       this.$refs['ruleForm'].validate(async (valid) => {
         if (valid) {
-          // this.dialogFormVisible = false
           this.UserData.type = this.UserData.type
           let result = await this.$API.user.sendUserInfo(this.UserData)
           if (result.code == 200) {
             this.$message({ message: this.UserData.id ? '修改用户成功' : "添加用户成功", type: 'success' })
             this.getPage()
+            if (this.UserData.id) {
+              this.dialogFormVisible = false
+            }
           }
           this.cleanData()
         } else {

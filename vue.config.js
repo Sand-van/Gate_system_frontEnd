@@ -40,7 +40,8 @@ module.exports = {
     // 配置代理跨域
     proxy: {
       '/dev-api': {
-        target: 'http://localhost:8080',
+        target: 'http://10.73.128.31:8080',
+        // target: 'http://127.0.0.1:8080',
         pathRewrite: { '^/dev-api':'' },
       }
     }

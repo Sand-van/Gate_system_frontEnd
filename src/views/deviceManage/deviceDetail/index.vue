@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- 设备信息 -->
-    <el-descriptions class="margin-top" title="设备信息" :column="3" border style="width: 1000px;">
+    <el-descriptions class="margin-top" title="设备信息" :column="2" border style="width: 1000px;">
       <template slot="extra">
-        <el-button type="primary" size="small">修改信息</el-button>
+        <el-button type="primary" size="small" @click="showChangeDeviceDataDialog">修改设备名</el-button>
       </template>
-      <el-descriptions-item>
+      <el-descriptions-item :contentStyle="{ 'text-align': 'center' }">
         <template slot="label">
           <i class="el-icon-user"></i>
           设备名
@@ -14,10 +14,10 @@
       </el-descriptions-item>
       <el-descriptions-item>
         <template slot="label">
-          <i class="el-icon-tickets"></i>
-          设备ip
+          <i class="el-icon-user"></i>
+          设备id
         </template>
-        {{ this.queryDeviceData.ip }}
+        {{ this.queryDeviceData.id }}
       </el-descriptions-item>
       <el-descriptions-item :contentStyle="{ 'text-align': 'center' }">
         <template slot="label">
@@ -27,6 +27,13 @@
         <el-tag v-if="this.queryDeviceData.status === '1'" type="success">在线</el-tag>
         <el-tag v-else-if="this.queryDeviceData.status === '2'" type="danger">离线</el-tag>
         <el-tag v-else-if="this.queryDeviceData.status === '3'" type="info">禁用</el-tag>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          设备ip
+        </template>
+        {{ this.queryDeviceData.ip }}
       </el-descriptions-item>
     </el-descriptions>
 
@@ -137,14 +144,16 @@
           </el-input>
         </el-col>
         <el-col :span="3">
-          <el-input placeholder="要搜索的用户账号" prefix-icon="el-icon-data-board"
-            v-model="deviceRecordsData.searchUserAccount" clearable @keyup.enter.native="getDeviceRecordsPage">
+          <el-input placeholder="要搜索的用户账号" prefix-icon="el-icon-data-board" v-model="deviceRecordsData.searchUserAccount"
+            clearable @keyup.enter.native="getDeviceRecordsPage">
           </el-input>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="4">
           <el-date-picker v-model="deviceRecordsData.searchBeingTime" type="datetime" placeholder="选择开始日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
+        </el-col>
+        <el-col :span="4">
           <el-date-picker v-model="deviceRecordsData.searchEndTime" type="datetime" placeholder="选择结束日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
@@ -157,8 +166,16 @@
       <!-- 表格 -->
       <el-table style="width: 100%; margin-top:20px" border stripe :data="deviceRecordsData.dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
-        <el-table-column prop="userName" label="姓名" width="width"></el-table-column>
         <el-table-column prop="permissionTime" label="通行时间" width="width"></el-table-column>
+        <el-table-column prop="deviceName" label="通行设备名" width="width"></el-table-column>
+        <el-table-column prop="userName" label="姓名"></el-table-column>
+        <el-table-column prop="cardId" label="卡id"></el-table-column>
+        <el-table-column prop="prop" label="结果" width="110px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.isSuccess === '0'" type="danger">非法访问</el-tag>
+            <el-tag v-else-if="row.isSuccess === '1'" type="success">成功</el-tag>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="deviceRecordsData.total"
@@ -168,7 +185,6 @@
         @size-change="getDeviceRecordsPageByPaginationSizeChange">
       </el-pagination>
     </el-card>
-
 
     <!-- 添加管理员权限表单 -->
     <el-dialog title='添加管理员' :visible.sync="addAdminDialogFormVisible">
@@ -231,21 +247,21 @@
 
       <el-card style="margin-top: 20px;">
         <!-- 搜索框 -->
-        <el-row :gutter="8" >
+        <el-row :gutter="8">
           <el-col :span="6">
             <el-input placeholder="要搜索的名称" prefix-icon="el-icon-user-solid" v-model="userSelect.searchUserName" clearable
               @keyup.enter.native="getUserPage">
             </el-input>
             <!-- <div class="grid-content bg-purple"></div> -->
           </el-col>
-  
+
           <el-col :span="6">
             <el-input placeholder="要搜索的学工号" prefix-icon="el-icon-edit-outline" v-model="userSelect.searchUserAccount"
               clearable @keyup.enter.native="getUserPage">
             </el-input>
             <!-- <div class="grid-content bg-purple"></div> -->
           </el-col>
-  
+
           <el-col :span="2">
             <el-button type="primary" icon="el-icon-search" @click="getUserPage" round>搜索</el-button>
             <!-- <div class="grid-content bg-purple"></div> -->
@@ -278,6 +294,19 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="disShowAddPermitDialog">完 成</el-button>
         <el-button type="primary" @click="sendAddPermitInfo">添 加</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 修改设备名 -->
+    <el-dialog title="修改设备名" :visible.sync="changeDeviceDataDialogFormVisible">
+      <el-form :model="changeDeviceData">
+        <el-form-item label="设备名" prop="deviceName">
+          <el-input v-model="changeDeviceData.deviceName"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="disShowChangeDeviceDataDialog">取 消</el-button>
+        <el-button type="primary" @click="sendDeviceData">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -342,7 +371,12 @@ export default {
       // 添加管理员相关
       addAdminDialogFormVisible: false,
       addPermitDialogFormVisible: false,
-      selectBeginAndEndTime: []
+      selectBeginAndEndTime: [],
+
+      changeDeviceDataDialogFormVisible: false,
+      changeDeviceData: {
+        deviceName: '',
+      },
     }
   },
   mounted() {
@@ -518,11 +552,32 @@ export default {
         });
       }
       this.getDevicePermitPage()
+    },
+    // 修改设备信息
+    showChangeDeviceDataDialog() {
+      this.changeDeviceData.deviceName = this.queryDeviceData.name
+      this.changeDeviceDataDialogFormVisible = true
+    },
+    disShowChangeDeviceDataDialog() {
+      this.changeDeviceDataDialogFormVisible = false
+    },
+    async sendDeviceData() {
+      const deviceInfo = {
+        id: this.queryDeviceData.id,
+        name: this.changeDeviceData.deviceName
+      }
+      let result = await this.$API.deviceManage.updateDeviceInfo(deviceInfo)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        })
+      }
+      this.getDeviceInfo()
+      this.changeDeviceDataDialogFormVisible = false
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

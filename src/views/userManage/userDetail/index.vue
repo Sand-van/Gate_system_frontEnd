@@ -129,10 +129,12 @@
             clearable @keyup.enter.native="getMyRecordsPage">
           </el-input>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="4">
           <el-date-picker v-model="myRecordsData.searchBeingTime" type="datetime" placeholder="选择开始日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
+        </el-col>
+        <el-col :span="4">
           <el-date-picker v-model="myRecordsData.searchEndTime" type="datetime" placeholder="选择结束日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>

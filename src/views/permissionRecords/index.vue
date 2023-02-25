@@ -19,12 +19,12 @@
             @keyup.enter.native="getPage">
           </el-input>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <el-date-picker v-model="searchBeingTime" type="datetime" placeholder="选择开始日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <el-date-picker v-model="searchEndTime" type="datetime" placeholder="选择结束日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
@@ -37,13 +37,20 @@
       <!-- 表格 -->
       <el-table style="width: 100%; margin-top:20px" border stripe :data="dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
-        <el-table-column prop="userName" label="姓名"></el-table-column>
-        <el-table-column prop="deviceName" label="通行设备名" width="width"></el-table-column>
         <el-table-column prop="permissionTime" label="通行时间" width="width"></el-table-column>
+        <el-table-column prop="deviceName" label="通行设备名" width="width"></el-table-column>
+        <el-table-column prop="userName" label="姓名"></el-table-column>
+        <el-table-column prop="cardId" label="卡id"></el-table-column>
+        <el-table-column prop="prop" label="结果" width="110px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.isSuccess === '0'" type="danger">非法访问</el-tag>
+            <el-tag v-else-if="row.isSuccess === '1'" type="success">成功</el-tag>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页器 -->
-      <el-pagination style="margin-top:20px; text-align: center;" :total="total" :current-page="page" :page-size="pageSize"
-        :page-sizes="[5, 10, 20]" layout="prev, pager, next, jumper, ->, sizes, total"
+      <el-pagination style="margin-top:20px; text-align: center;" :total="total" :current-page="page"
+        :page-size="pageSize" :page-sizes="[5, 10, 20]" layout="prev, pager, next, jumper, ->, sizes, total"
         @current-change="getPageByPaginationCurrentChange" @size-change="getPageByPaginationSizeChange">
       </el-pagination>
     </el-card>
@@ -94,6 +101,4 @@ export default {
 </script>
 
 
-<style>
-
-</style>
+<style></style>
