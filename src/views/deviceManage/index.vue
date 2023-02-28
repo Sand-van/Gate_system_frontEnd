@@ -95,6 +95,7 @@
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="id" label="设备id" width="width"></el-table-column>
         <el-table-column prop="name" label="设备名" width="width"></el-table-column>
+        <el-table-column prop="ip" label="ip地址" width="width"></el-table-column>
         <el-table-column prop="prop" label="状态" width="80px" align="center">
           <template slot-scope="{row, $index}">
             <el-tag v-if="row.status === '1'" type="success">在线</el-tag>
@@ -102,7 +103,6 @@
             <el-tag v-else-if="row.status === '3'" type="info">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="ip" label="ip" width="width"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="200px" align="center">
           <template slot-scope="{row, $index}">

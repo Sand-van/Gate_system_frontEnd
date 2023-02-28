@@ -1,11 +1,10 @@
-import user from '@/store/modules/user'
 import request from '@/utils/request'
 
 export function login(data) {
   return request({
     url: 'user/login',
     method: 'post',
-    params: { userAccount: data.userAccount, password: data.password }
+    data: { account: data.userAccount, password: data.password }
   })
 }
 
