@@ -28,7 +28,7 @@ export function deletePermitByList(userPermitIdList) {
   return request({
     url: '/user/permit/deleteByIdList',
     method: 'post',
-    userPermitIdList
+    data: userPermitIdList
   })
 }
 

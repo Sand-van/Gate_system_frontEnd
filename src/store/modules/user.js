@@ -1,6 +1,6 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { asyncRoutes, constantRoutes, anyRoutes, resetRouter } from '@/router'
+import { asyncRoutes, constantRoutes, resetRouter } from '@/router'
 import router from '@/router'
 
 const getDefaultState = () => {
@@ -44,9 +44,8 @@ const mutations = {
     state.phoneNumber = phoneNumber
   },
   SET_FINAL_ROUTES: (state, resultAsyncRoutes) => {
-    state.finalRoutes = constantRoutes.concat(resultAsyncRoutes, anyRoutes)
-    // router.addRoutes(state.finalRoutes)
-    resetRouter(state.finalRoutes)
+    router.addRoutes(resultAsyncRoutes)
+    state.finalRoutes = constantRoutes.concat(resultAsyncRoutes)
   }
 }
 
@@ -145,18 +144,18 @@ const setUserAsyncRoutes = (userType) => {
       'UserManageMain', 'UserManage', 'UserDetail',
       'DeviceManageMain', 'DeviceManage', 'DeviceDetail',
       'UserApplyManageMain', 'UserApplyManage',
-      'PermissionRecordsMain', 'PermissionRecords'
+      'PermissionRecordsMain', 'PermissionRecords','404'
     ]
   } else if (userType === '2') {
     routes = [
       'DeviceManageMain', 'DeviceManage', 'DeviceDetail',
       'UserApplyManageMain', 'UserApplyManage',
-      'PermissionRecordsMain', 'PermissionRecords'
+      'PermissionRecordsMain', 'PermissionRecords','404'
     ]
   } else {
     routes = [
       'DeviceManageMain', 'DeviceManage', 'DeviceDetail',
-      'UserApplyManageMain', 'UserApplyManage',
+      'UserApplyManageMain', 'UserApplyManage','404'
     ]
   }
   return computeAsyncRoutes(asyncRoutes, routes)

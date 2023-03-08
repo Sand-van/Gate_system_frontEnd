@@ -111,7 +111,7 @@ export const asyncRoutes = [
   {
     path: '/permissionRecords',
     component: Layout,
-    name:'PermissionRecordsMain',
+    name: 'PermissionRecordsMain',
     children: [{
       path: 'index',
       name: 'PermissionRecords',
@@ -119,10 +119,22 @@ export const asyncRoutes = [
       meta: { title: '通行记录', icon: 'records' },
     }]
   },
+
+  {
+    path: '*',
+    name: '404',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 // 404 page must be placed at the end !!!
-export const anyRoutes = { path: '*', redirect: '/404', hidden: true }
+// export const anyRoutes = [
+//   {
+//     path: '*',
+//     redirect: '/404',
+//     hidden: true
+//   }]
 
 const createRouter = (routers) => new Router({
   // mode: 'history', // require service support
