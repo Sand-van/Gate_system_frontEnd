@@ -20,7 +20,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-date-picker v-model="searchBeingTime" type="datetime" placeholder="选择开始日期时间"
+          <el-date-picker v-model="searchBeginTime" type="datetime" placeholder="选择开始日期时间"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
         </el-col>
@@ -67,7 +67,7 @@ export default {
       searchUserName: '',
       searchUserAccount: '',
       searchDeviceName: '',
-      searchBeingTime: '',
+      searchBeginTime: '',
       searchEndTime: '',
       total: 0,
       dataList: [],
@@ -88,8 +88,8 @@ export default {
       this.getPage()
     },
     async getPage() {
-      const { page, pageSize, searchUserName, searchUserAccount, searchDeviceName, searchBeingTime, searchEndTime } = this;
-      let result = await this.$API.permissionRecords.getRecordsPage({ page, pageSize, searchUserName, searchUserAccount, searchDeviceName, searchBeingTime, searchEndTime })
+      const { page, pageSize, searchUserName, searchUserAccount, searchDeviceName, searchBeginTime, searchEndTime } = this;
+      let result = await this.$API.permissionRecords.getRecordsPage({ page, pageSize, searchUserName, searchUserAccount, searchDeviceName, searchBeginTime, searchEndTime })
       // console.log(result)
       if (result.code == 200) {
         this.total = result.data.total

@@ -67,7 +67,13 @@
       <el-table style="width: 100%; margin-top:20px" border stripe :data="myManageDeviceData.dataList">
         <el-table-column prop="prop" label="序号" width="60px" type="index" align="center"></el-table-column>
         <el-table-column prop="deviceName" label="设备名" width="width"></el-table-column>
-        <el-table-column prop="prop" label="状态" width="width"></el-table-column>
+        <el-table-column prop="prop" label="状态" align="center" width="100px">
+          <template slot-scope="{row, $index}">
+            <el-tag v-if="row.deviceStatue === '1'" type="success">在线</el-tag>
+            <el-tag v-else-if="row.deviceStatue === '2'" type="danger">离线</el-tag>
+            <el-tag v-else-if="row.deviceStatue === '3'" type="info">禁用</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="120px" align="center">
           <template slot-scope="{row, $index}">
@@ -108,6 +114,11 @@
         <el-table-column prop="deviceName" label="设备名" width="width"></el-table-column>
         <el-table-column prop="beginTime" label="开始时间" width="width"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
+        <el-table-column prop="prop" label="操作" width="120px" align="center">
+          <template slot-scope="{row, $index}">
+            <el-button type="primary" size="small" icon="el-icon-info" @click="jumpToDeviceInfoPage(row)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页器 -->
       <el-pagination style="margin-top:20px; text-align: center;" :total="myPermitDeviceData.total"

@@ -4,6 +4,7 @@
     <el-descriptions class="margin-top" title="设备信息" :column="2" border style="width: 1000px;">
       <template slot="extra">
         <el-button type="primary" size="small" @click="showChangeDeviceDataDialog">修改设备名</el-button>
+        <el-button type="primary" size="small" @click="openDoor">启动设备</el-button>
       </template>
       <el-descriptions-item :contentStyle="{ 'text-align': 'center' }">
         <template slot="label">
@@ -401,8 +402,17 @@ export default {
   },
   methods: {
     async getDeviceInfo() {
-      let request = await this.$API.deviceManage.getDeviceInfo(this.queryDeviceId)
-      this.queryDeviceData = request.data
+      let result = await this.$API.deviceManage.getDeviceInfo(this.queryDeviceId)
+      this.queryDeviceData = result.data
+    },
+    async openDoor() {
+      let result = await this.$API.deviceManage.openDevice(this.queryDeviceId)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '启动成功'
+        });
+      }
     },
     // 设备的管理权限查询数据
     getDeviceManagePageByPaginationCurrentChange(page) {

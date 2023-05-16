@@ -148,7 +148,7 @@
         <el-table-column prop="endTime" label="结束时间" width="width"></el-table-column>
         <el-table-column prop="prop" label="操作" width="120" align="center">
           <template slot-scope="{row, $index}">
-            <el-button type="primary" size="small" icon="el-icon-info" @click="runDevice(row.deviceId)">开启</el-button>
+            <el-button type="primary" size="small" icon="el-icon-info" @click="openDoor(row.deviceId)">开启</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -326,8 +326,14 @@ export default {
     jumpToDeviceInfoPage(id) {
       this.$router.push({ name: "DeviceDetail", params: { id: id } })
     },
-    runDevice(deviceId) {
-      console.log(deviceId)
+    async openDoor(deviceId) {
+      let result = await this.$API.deviceManage.openDevice(deviceId)
+      if (result.code == 200) {
+        this.$message({
+          type: 'success',
+          message: '启动成功'
+        });
+      }
     }
   },
 
